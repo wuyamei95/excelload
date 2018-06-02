@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta charset="UTF-8">
+        <title>Title</title>
+    </head>
+    <body>
+    <form id="file_form" action="UpdFile" enctype="multipart/form-data"
+          method="post">
+        <input type="file" name="file" id="file_input" />
+        <input type="submit" value="文件上传" id='upFile-btn'>
+    </form>
+    <script type="text/javascript">
+        $(function() {
+
+            $("#file_form").submit(
+                function() {
+                    //首先验证文件格式
+                    var fileName = $('#file_input').val();
+                    if (fileName === '') {
+                        alert('请选择文件');
+                        return false;
+                    }
+                    var fileType = (fileName.substring(fileName
+                        .lastIndexOf(".") + 1, fileName.length))
+                        .toLowerCase();
+                    if (fileType !== 'xls' && fileType !== 'xlsx') {
+                        alert('文件格式不正确，excel文件！');
+                        return false;
+                    }
+
+                    $("#file_form").ajaxSubmit({
+                        dataType : "json",
+                        success : function(data, textStatus) {
+                            if (data['result'] === 'OK') {
+                                console.log('上传文件成功');
+                            } else {
+                                console.log('文件格式错误');
+                            }
+                            return false;
+                        }
+                    });
+                    return false;
+                });
+
+        });
+    </script>
+
+    </body>
+</html>
